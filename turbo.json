@@ -1,0 +1,19 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": ["**/.env.*local"],
+  "pipeline": {
+    "build": {
+      "env": [
+        "NEXT_PUBLIC_API_ENDPOINT",
+        "NEXT_PUBLIC_EVENT_RESULT_BUCKET_ADMIN_KMS_KEY_ARN"
+      ],
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", "!.next/cache/**"]
+    },
+    "lint": {},
+    "dev": {
+      "cache": false,
+      "persistent": true
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "lib": ["esnext"],
+    "target": "esnext",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    "declaration": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "strict": true,
+    "baseUrl": ".",
+    "paths": {
+      "coc-contracts": ["../../contracts/src"],
+      "coc-services-common/azure": ["../../apps/common-service/src/azure"],
+      "coc-services-common/crypto": ["../../apps/common-service/src/crypto"],
+      "coc-services-common/di": ["../../apps/common-service/src/di"],
+      "coc-services-common/s3": ["../../apps/common-service/src/s3"],
+      "coc-services-common/sqs": ["../../apps/common-service/src/sqs"],
+      "coc-services-common/errors": ["../../apps/common-service/src/errors"],
+      "coc-services-common/stores": ["../../apps/common-service/src/stores"],
+      "coc-services-common/serverless": ["../../apps/common-service/src/serverless"],
+      "coc-services-common/utils": ["../../apps/common-service/src/utils"],
+      "coc-services-common/constant": ["../../apps/common-service/src/constant"]
+    }
+  },
+  "exclude": ["node_modules"]
+}

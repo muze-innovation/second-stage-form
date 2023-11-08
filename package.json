@@ -1,0 +1,16 @@
+{
+  "private": true,
+  "scripts": {
+    "dev": "export STAGE=local && turbo run dev"
+  },
+  "name": "second-stage-form",
+  "packageManager": "npm@9.5.1",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "dependencies": {
+    "prettier": "^2.5.1",
+    "turbo": "^1.10.15"
+  }
+}
