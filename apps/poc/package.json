@@ -13,7 +13,8 @@
     "react": "^18",
     "react-dom": "^18",
     "survey-core": "^1.9.116",
-    "survey-react-ui": "^1.9.103"
+    "survey-react-ui": "^1.9.103",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@types/node": "^20",
