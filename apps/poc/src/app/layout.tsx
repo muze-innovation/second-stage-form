@@ -1,5 +1,8 @@
 import type { Metadata } from 'next'
+import 'survey-core/defaultV2.min.css'
 import './globals.css'
+import './styles/custom-sjs.css'
+import './styles/product-form.css'
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -8,8 +11,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body className="p-8">{children}</body>
+    <html>
+      <body className="h-screen w-screen bg-default-50 p-8">{children}</body>
     </html>
   )
 }

@@ -1,0 +1,259 @@
+:root {
+  --table-border-color: #d7d7d7;
+  --table-header-bg-color: #deedfe;
+  --table-header-color: #0a6ee1;
+  --table-button-text-color: #074e9f;
+  --divider-color: #deedfe;
+  --product-form-title-color: #074e9f;
+  --input-required-border-color: #f79009;
+  --input-border-color: #e4e7ec;
+  --description-color: #f79009;
+}
+
+.product-survey-form .sd-title.sd-page__title {
+  color: var(--product-form-title-color);
+  margin-bottom: 0px;
+}
+
+.product-survey-form .sv-action .sv-action__content .sd-action.btn-delete:focus {
+  background-color: transparent;
+}
+
+.product-survey-form .sv-action .sv-action__content .sd-action.btn-delete:hover {
+  background-color: transparent;
+}
+
+.product-survey-form .sd-row.sd-clearfix.sd-row--compact.sd-page__row {
+  margin: 0px;
+}
+
+#custom-sv-nav-cancel {
+  margin-left: auto;
+}
+.sd-body__navigation:has(#custom-sv-nav-cancel) #sv-nav-complete {
+  margin-left: inherit;
+}
+
+.sd-panel__content .sd-row.sd-clearfix.sd-row--compact.sd-row--multiple {
+}
+
+[data-key='category0'] .sd-element {
+  padding: 4px 0px;
+}
+[data-key='subcategory-1'] .sd-element {
+  padding: 4px 0px;
+}
+[data-key='subcategory2-2'] .sd-element {
+  padding: 4px 0px;
+}
+
+[data-name='unit'] .sd-title,
+[data-name='temperatureUnit'] .sd-title {
+  opacity: 0;
+}
+
+[data-key^='packagingPanel'] .sd-panel__content {
+  padding-top: 0px;
+}
+
+[data-name='packaging'] {
+  overflow: visible;
+  margin-top: -26px;
+}
+[data-name='packaging'] table.sd-matrixdynamic {
+  overflow: hidden;
+}
+[data-name='packaging'] thead th {
+  text-align: left;
+  padding: 10px 16px;
+  color: var(--table-header-color);
+  background-color: var(--table-header-bg-color);
+  border-bottom: 1px solid var(--table-border-color);
+}
+[data-name='packaging'] thead th:nth-child(2),
+[data-name='packaging'] tbody td.sd-table__cell:nth-child(2) {
+  border-right: 1px solid var(--table-border-color);
+}
+[data-name='packaging'] thead td.sd-table__cell--empty {
+  width: 112px;
+  padding: 10px 16px;
+  color: var(--table-header-color);
+  background-color: var(--table-header-bg-color);
+  border-bottom: 1px solid var(--table-border-color);
+  border-left: 1px solid var(--table-border-color);
+}
+[data-name='packaging'] thead th span {
+  line-height: 24px;
+  font-size: 16px;
+}
+
+[data-name='packaging'] tbody .sd-table__cell--actions:not(.sd-table__cell--vertical):last-child .sd-action-bar {
+  justify-content: center;
+}
+[data-name='packaging'] tbody td.sd-table__cell {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--table-border-color);
+}
+[data-name='packaging'] tbody td.sd-table__cell--actions {
+  border-left: 1px solid var(--table-border-color);
+}
+[data-name='packaging'] tbody tr:has(+ tr td.sd-table__cell--error-bottom) td.sd-table__cell {
+  border-bottom: inherit;
+}
+[data-name='packaging'] tbody tr td.sd-table__cell--error-bottom {
+  padding-top: inherit;
+}
+[data-name='packaging']
+  tbody
+  tr:has(td.sd-table__cell--actions)
+  + tr:has(td.sd-table__cell--error-bottom)
+  td:last-child {
+  border-left: 1px solid var(--table-border-color);
+}
+
+[data-name='packaging'] .sd-matrixdynamic__footer {
+  padding-top: 0px;
+  padding-bottom: 0px;
+  height: 46px;
+}
+
+[data-name='packaging'] .sd-table-wrapper {
+  margin-top: 16px;
+}
+
+[data-name='packaging'] .sd-matrixdynamic__content,
+[data-name='packaging'] .sd-question__header {
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+[data-name='packaging'] button.sd-matrixdynamic__add-btn {
+  padding: 10px 16px 10px calc(16px + 20px + 8px);
+  color: var(--table-button-text-color);
+  border: 1px solid var(--table-button-text-color);
+  background-color: transparent !important;
+  opacity: 1 !important;
+  border-radius: 8px;
+  margin-left: 0px;
+  left: auto;
+  position: absolute;
+  right: 8px;
+}
+[data-name='packaging'] button.sd-matrixdynamic__add-btn:after {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 11px;
+  left: 16px;
+  width: 20px;
+  height: 20px;
+  background-position: center center;
+  background-size: contain;
+  background-image: url('/icons/icon-add.svg');
+}
+[data-name='packaging'] button.sd-matrixdynamic__remove-btn {
+  width: 20px;
+  height: 20px;
+  opacity: 1 !important;
+  background-color: transparent !important;
+  background-position: center center;
+  background-size: contain;
+  background-image: url('/icons/icon-trash-gray.svg');
+}
+[data-name='packaging'] button.sd-matrixdynamic__remove-btn svg {
+  display: none;
+}
+
+[data-name='life'] .sd-text__content input {
+  padding-right: 50px;
+}
+[data-name='life'] .sd-text__content:after {
+  content: 'วัน';
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  transform: translateY(-50%);
+}
+
+[data-name='price'] .sd-text__content input {
+  padding-right: 50px;
+}
+[data-name='price'] .sd-text__content:after {
+  content: 'บาท';
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  transform: translateY(-50%);
+}
+
+[data-key^='requiredStandardPanel'] .sd-element--nested.sd-panel > .sd-element__header--location-top,
+[data-key^='optionalStandardPanel'] .sd-element--nested.sd-panel > .sd-element__header--location-top {
+  padding-top: 0px;
+  padding-bottom: 4px;
+}
+
+[data-key^='requiredStandardPanel'] .sd-element--nested.sd-panel,
+[data-key^='optionalStandardPanel'] .sd-element--nested.sd-panel {
+  border: none;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+[data-key^='requiredStandardPanel'] .sd-panel__content,
+[data-key^='optionalStandardPanel'] .sd-panel__content {
+  padding-top: 0px;
+}
+
+[data-key^='requiredStandardPanel'] .sd-row--multiple,
+[data-key^='optionalStandardPanel'] .sd-row--multiple {
+  row-gap: 0px;
+}
+
+[data-key^='standardPanel'] .sd-row {
+  margin-top: 0px;
+}
+
+[data-key^='standardPanel'] .sd-element--with-frame {
+  padding-bottom: 0px !important;
+}
+
+[data-key^='generalPanel'] .btn-product-form:hover {
+  background-color: rgba(0, 0, 0, 0);
+  color: none;
+}
+
+[data-key^='requiredStandardPanel'] .sd-description.sd-panel__description {
+  font-size: 14px;
+  color: var(--description-color);
+}
+[data-key^='requiredStandards'] {
+  padding-left: calc(16px + 24px) !important;
+  padding-right: calc(16px + 24px) !important;
+}
+[data-key^='requiredStandards'] .sd-element__title {
+  font-weight: 600;
+  color: #667085;
+}
+[data-key^='requiredStandards'] .sd-element__title span {
+  line-height: 24px;
+}
+[data-key^='requiredStandards'] .sd-item__decorator {
+  border-color: var(--input-required-border-color);
+}
+[data-key^='requiredStandards'] .sd-item--checked .sd-item__decorator {
+  border-color: var(--input-border-color) !important;
+}
+
+[data-key^='optionalStandards'] .sd-question__content {
+  padding-left: calc(16px + 24px) !important;
+  padding-right: calc(16px + 24px) !important;
+}
+
+[data-key^='factoryStandardPanel'] .sd-element--with-frame {
+  padding-top: 0px !important;
+}
+
+[data-key^='factoryStandardPanel'] .sd-panel__content {
+  padding-left: calc(24px + 24px);
+  padding-right: calc(24px + 24px);
+}
