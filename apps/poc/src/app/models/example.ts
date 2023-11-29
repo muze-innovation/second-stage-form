@@ -788,38 +788,38 @@ export const surveyJson = {
           name: 'divider6',
           html: '<div class="panel-divider"></div>',
         },
-        {
-          type: 'panel',
-          name: 'standardPanel',
-          elements: [
-            {
-              type: 'panel',
-              name: 'requiredStandardPanel',
-              elements: [],
-              title: 'มาตรฐานที่กฏหมายบังคับ',
-              description: '*ถ้าคุณมีข้อมูลมาตรฐานสินค้าที่กฏหมายบังคับไม่ครบถ้วน อาจจะมีผลต่อการพิจารณาสินค้าของคุณ',
-            },
-            {
-              type: 'panel',
-              name: 'optionalStandardPanel',
-              elements: [
-                {
-                  type: 'checkbox',
-                  name: 'optionalStandards',
-                  startWithNewLine: false,
-                  title: ' ',
-                  hideNumber: true,
-                  width: '100%',
-                  hideIfChoicesEmpty: true,
-                  choices: [],
-                  colCount: 2,
-                },
-              ],
-              title: 'มาตรฐานที่กฏหมายไม่บังคับ',
-            },
-          ],
-          title: 'มาตรฐานสินค้าที่ได้รับการรับรอง (เลือกได้มากกว่า 1 ข้อ)',
-        },
+        // {
+        //   type: 'panel',
+        //   name: 'standardPanel',
+        //   elements: [
+        //     {
+        //       type: 'panel',
+        //       name: 'requiredStandardPanel',
+        //       elements: [],
+        //       title: 'มาตรฐานที่กฏหมายบังคับ',
+        //       description: '*ถ้าคุณมีข้อมูลมาตรฐานสินค้าที่กฏหมายบังคับไม่ครบถ้วน อาจจะมีผลต่อการพิจารณาสินค้าของคุณ',
+        //     },
+        //     {
+        //       type: 'panel',
+        //       name: 'optionalStandardPanel',
+        //       elements: [
+        //         {
+        //           type: 'checkbox',
+        //           name: 'optionalStandards',
+        //           startWithNewLine: false,
+        //           title: ' ',
+        //           hideNumber: true,
+        //           width: '100%',
+        //           hideIfChoicesEmpty: true,
+        //           choices: [],
+        //           colCount: 2,
+        //         },
+        //       ],
+        //       title: 'มาตรฐานที่กฏหมายไม่บังคับ',
+        //     },
+        //   ],
+        //   title: 'มาตรฐานสินค้าที่ได้รับการรับรอง (เลือกได้มากกว่า 1 ข้อ)',
+        // },
         {
           type: 'html',
           name: 'divider7',

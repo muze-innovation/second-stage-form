@@ -149,7 +149,7 @@
   height: 20px;
   background-position: center center;
   background-size: contain;
-  background-image: url('/icons/icon-add.svg');
+  background-image: url('../../public/icons/icon-add.svg');
 }
 [data-name='packaging'] button.sd-matrixdynamic__remove-btn {
   width: 20px;
@@ -158,7 +158,7 @@
   background-color: transparent !important;
   background-position: center center;
   background-size: contain;
-  background-image: url('/icons/icon-trash-gray.svg');
+  background-image: url('../../public/icons/icon-trash-gray.svg');
 }
 [data-name='packaging'] button.sd-matrixdynamic__remove-btn svg {
   display: none;

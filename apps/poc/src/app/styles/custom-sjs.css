@@ -186,13 +186,13 @@ h4.sd-title.sd-element__title span {
   height: 40px;
   background-position: center center;
   background-size: contain;
-  background-image: url('/icons/icon-trash.svg');
+  background-image: url('../../public/icons/icon-trash.svg');
   background-color: transparent;
   top: 16px;
   right: 16px;
 }
 .sd-question--answered .sd-file__choose-btn {
-  background-image: url('/icons/icon-upload.svg');
+  background-image: url('../../public/icons/icon-upload.svg');
   right: calc(16px + 40px + 16px);
 }
 
@@ -202,7 +202,7 @@ h4.sd-title.sd-element__title span {
   height: 24px;
   background-position: center center;
   background-size: contain;
-  background-image: url('/icons/icon-remove-item.svg');
+  background-image: url('../../public/icons/icon-remove-item.svg');
   background-color: transparent;
 }
 
@@ -365,11 +365,14 @@ textarea.sd-input {
 }
 
 /* custom input with icon */
-[data-name='tiktok'] .sd-input,
-[data-name='instagram'] .sd-input,
-[data-name='facebook'] .sd-input,
-[data-name='website'] .sd-input {
+[data-name='tiktok'] .sd-input.sd-input[type='url'],
+[data-name='instagram'] .sd-input.sd-input[type='url'],
+[data-name='facebook'] .sd-input.sd-input[type='url'],
+[data-name='website'] .sd-input.sd-input[type='url'] {
   padding-left: calc(16px + 24px + 8px);
+  box-sizing: inherit;
+  width: 100%;
+  height: auto;
 }
 [data-name='tiktok'] .sd-text__content:after,
 [data-name='instagram'] .sd-text__content:after,
@@ -384,16 +387,16 @@ textarea.sd-input {
   top: 10px;
   background-position: center center;
   background-size: contain;
-  background-image: url('/icons/icon-instagram.svg');
+  background-image: url('../../public/icons/icon-instagram.svg');
 }
 [data-name='tiktok'] .sd-text__content:after {
-  background-image: url('/icons/icon-tiktok.svg');
+  background-image: url('../../public/icons/icon-tiktok.svg');
 }
 [data-name='facebook'] .sd-text__content:after {
-  background-image: url('/icons/icon-facebook.svg');
+  background-image: url('../../public/icons/icon-facebook.svg');
 }
 [data-name='website'] .sd-text__content:after {
-  background-image: url('/icons/icon-website.svg');
+  background-image: url('../../public/icons/icon-website.svg');
 }
 
 .sd-file__decorator:after {
@@ -401,7 +404,7 @@ textarea.sd-input {
   width: 93px;
   height: 64px;
   padding: 32px;
-  background-image: url(/icons/icon-upload.svg);
+  background-image: url('../../public/icons/icon-upload.svg');
   background-position: center center;
   background-size: contain;
   content: '';
