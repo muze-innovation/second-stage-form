@@ -39,27 +39,69 @@ export default function InputSurvey() {
   })
   // function sendRequest(url: string, onloadSuccessCallback: any) {}
 
-  svy.custom.onChoicesLazyLoad.add(async (_, options) => {
-    if (options.question.getType() === 'dropdown' && options.question.name === 'country') {
-      const url = `https://surveyjs.io/api/CountriesExamplePagination?skip=${options.skip}&take=${options.take}&filter=${options.filter}`
+  svy.custom.onUploadFiles
+    .add('*', async (s) => {
+      return 'https://d1pjg4o0tbonat.cloudfront.net/content/dam/toshiba-aem/th/electric-water-boiler/conventional/plk-g33t/gallery2.jpg/jcr:content/renditions/cq5dam.web.5000.5000.jpeg'
+    })
+    .add('*', async (f) => {
+      return ''
+    })
+    .build()
+
+  svy.custom.onChoicesLazyLoad
+    .add({ name: 'province' }, async (_, __) => {
+      _.setValue('district', '')
+      _.setValue('subdistrict', '')
+      _.setValue('zipcode', '')
+      const url = 'http://localhost:5100/api/v1/master/addresses/province'
+      const resp = await fetch(url, { method: 'GET' })
+      const json = await resp.json()
+
+      return {
+        data: json.data.map((d: any) => ({ value: d.key, text: d.label })),
+        totalCount: json.data.length,
+      } as any
+    })
+    .add({ name: 'district' }, async (_, __) => {
+      const province = _.getValue('province')
+      _.setValue('subdistrict', '')
+      _.setValue('zipcode', '')
+      const url = `http://localhost:5100/api/v1/master/addresses/district?provinceCode=${province}`
       const resp = await fetch(url, { method: 'GET' })
       const json = await resp.json()
       return {
-        data: json.countries,
-        totalCount: json.total,
+        data: json?.data?.map((d: any) => ({ value: d.key, text: d.label })) || [],
+        totalCount: json?.data?.length || 0,
       } as any
-    }
-  })
+    })
+    .add({ name: 'subdistrict', type: 'dropdown' }, async (_, __) => {
+      const province = _.getValue('province')
+      const district = _.getValue('district')
 
-  svy.onGetChoiceDisplayValue.add((_, options) => {
-    if (options.question.getType() === 'dropdown' && options.question.name === 'country') {
-      const valuesStr = options.values.map((value) => 'values=' + value).join('&')
-      const url = 'https://surveyjs.io/api/GetCountryNames?' + valuesStr
-      // sendRequest(url, (data) => {
-      //   options.setItems(data.countryNames)
-      // })
-    }
-  })
+      _.setValue('zipcode', '')
+      const url = `http://localhost:5100/api/v1/master/addresses/subdistrict?provinceCode=${province}&districtCode=${district}`
+      const resp = await fetch(url, { method: 'GET' })
+      const json = await resp.json()
+      return {
+        data: json?.data?.map((d: any) => ({ value: d.key, text: d.label })) || [],
+        totalCount: json?.data?.length || 0,
+      } as any
+    })
+    .add({ name: 'zipcode' }, async (_, __) => {
+      const province = _.getValue('province')
+      const district = _.getValue('district')
+      const subdistrict = _.getValue('subdistrict')
+      const url = `http://localhost:5100/api/v1/master/addresses/zipcode?provinceCode=${province}&districtCode=${district}&subdistrictCode=${subdistrict}`
+      const resp = await fetch(url, { method: 'GET' })
+      const json = await resp.json()
+      return {
+        data: json?.data?.map((d: any) => ({ value: d.key, text: d.label })) || [],
+        totalCount: json?.data?.length || 0,
+      } as any
+    })
+    .build()
+
+  svy.onGetChoiceDisplayValue.add((_, options) => {})
   return (
     <div className="bg-gray-100 p-6 flex flex-col gap-4">
       <Survey model={svy} />

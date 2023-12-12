@@ -1,62 +1,140 @@
-import { ChoicesLazyLoadEvent, EventBase, Model, SurveyModel } from 'survey-core'
+import { ChoicesLazyLoadEvent, EventBase, Model, QuestionFileModel, SurveyModel, UploadFilesEvent } from 'survey-core'
 
+type CallbackFuction = (
+  sender: Model,
+  options: ChoicesLazyLoadEvent,
+) => Promise<{
+  data: Array<
+    | {
+        value: any
+        text: string
+      }
+    | string
+  >
+  totalCount: number
+}>
 export class CustomOnChoicesLazyLoad {
+  /**
+   add indentity 
+    type, name
+    support all type
+   **/
   // add event to subscribe to callback function
+
   constructor(private _event: EventBase<SurveyModel, ChoicesLazyLoadEvent>) {
     //
   }
-  private cacheResults: Record<string, any | any[]> = {}
-  private enabledCache: boolean = true
-
-  private debounceInstance = (v: any) => v
-
-  // enable / disable cache results
-  public setDisabledCache(flag: boolean): this {
-    this.enabledCache = !flag
+  private cacheResults: Record<string, CallbackFuction> = {}
+  add(indentity: '*', func: CallbackFuction): this
+  add(indentity: { name: string }, func: CallbackFuction): this
+  add(indentity: { type: string }, func: CallbackFuction): this
+  add(indentity: { name: string; type: string }, func: CallbackFuction): this
+  public add(indentity: { type?: string; name?: string } | '*', func: CallbackFuction) {
+    let key = ''
+    if (indentity === '*') {
+      key = '*/*'
+    } else if (indentity.name && !indentity.type) {
+      key = `${indentity.name}/*`
+    } else if (!indentity.name && indentity.type) {
+      key = `*/${indentity.type}`
+    } else {
+      key = `${indentity.name}/${indentity.type}`
+    }
+    this.cacheResults[key] = func
     return this
-  }
-  // milliseconds
-  public setDebounceWaitingTime(time: number): this {
-    return this
+    //
   }
 
-  public async add(
-    func: (
-      sender: Model,
-      options: ChoicesLazyLoadEvent,
-    ) => Promise<{
-      data: Array<
-        | {
-            value: any
-            text?: String
-            imageLink?: string
-            customProperty?: any
-          }
-        | string
-      >
-      totalCount: number
-    }>,
-  ): Promise<void> {
-    this._event.add((s, o) => {
-      const hashId = `${o.question.getType()}-${o.question.name}-${o.filter}-${o.take}-${o.skip}`
+  async build(): Promise<void> {
+    this._event.add(async (s, o) => {
+      const func =
+        this.cacheResults['*/*'] ||
+        this.cacheResults[`*/${o.question.getType()}`] ||
+        this.cacheResults[`${o.question.name}/*`] ||
+        this.cacheResults[`${o.question.name}/${o.question.getType()}`]
 
-      if (this.enabledCache && this.cacheResults[hashId]) {
-        const cData = this.cacheResults[hashId]
-        o.setItems(cData.data, cData.totalCount)
-        return
-      }
-      func(s, o).then(({ data, totalCount }) => {
+      if (!func) {
+        o.setItems([], 0)
+      } else {
+        const { data, totalCount } = await func(s, o)
         o.setItems(data, totalCount)
-        if (this.enabledCache) {
-          this.cacheResults[hashId] = { data, totalCount }
-        }
-      })
+      }
     })
   }
 }
 
+export class CustomOnUploadFiles {
+  constructor(private _uploadFiles: EventBase<SurveyModel, UploadFilesEvent>) {
+    //
+  }
+  private cacheFunctions: Record<string, (files: File) => Promise<string>> = {}
+  private cacheCustomValidates: Record<string, (files: File) => Promise<void>> = {}
+
+  private validate(option: UploadFilesEvent) {
+    const { jsonObj } = option.question as any
+
+    // validate max size
+
+    if (jsonObj.maxFiles < option.files.length) {
+      // create new error class
+      throw new Error('is over max file size')
+    }
+
+    for (const file of option.files) {
+      if (jsonObj.maxSize < file.size) {
+        throw new Error('')
+      }
+    }
+  }
+
+  public addCustomValidate(path: '*' | { name: string }, onValidate: (file: File) => Promise<void>) {
+    const key = typeof path === 'string' ? path : path.name
+    this.cacheCustomValidates[key] = onValidate
+    //
+    return this
+  }
+
+  public add(
+    path: '*' | { name: string },
+    func: (files: File) => Promise<string>,
+    validates: (() => string)[] = [],
+  ): this {
+    const key = typeof path === 'string' ? path : path.name
+    this.cacheFunctions[key] = func
+    return this
+  }
+  // add validate max file size
+
+  public build(): void {
+    this._uploadFiles.add(async (s, o) => {
+      const func = this.cacheFunctions['*'] || this.cacheFunctions[o.question.name]
+
+      if (func) {
+        try {
+          this.validate(o)
+
+          const resp = await Promise.all(o.files.map(func))
+
+          o.callback(
+            'success',
+            resp.map((r, i) => ({
+              file: o.files[i],
+              name: o.files[i].name,
+              content: r,
+            })),
+          )
+        } catch (error) {
+          console.log('error ==>', error)
+          o.callback('error', error?.message)
+          //
+        }
+      }
+    })
+  }
+}
+
+// add more custom event
 export interface ICustomSurveyModel {
-  // add more custom event
   /**
    * modify onChoicesLazyLoad
    * can enable / disable cache results
@@ -64,6 +142,13 @@ export interface ICustomSurveyModel {
    * can debounce response from api
    * */
   onChoicesLazyLoad: CustomOnChoicesLazyLoad
+  /**
+   * modify onUploadFiles
+   * can validate memtype of uploaded files per question
+   * can set max size of uploaded files per question
+   * can keep throw error
+   */
+  onUploadFiles: CustomOnUploadFiles
 }
 
 export interface ISuperSurveyModel extends Model {

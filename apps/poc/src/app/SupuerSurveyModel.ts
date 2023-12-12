@@ -1,8 +1,11 @@
-import { ISuperSurveyModel, ICustomSurveyModel, CustomOnChoicesLazyLoad } from './contect'
+import { ISuperSurveyModel, ICustomSurveyModel, CustomOnChoicesLazyLoad, CustomOnUploadFiles } from './contect'
 import { Model } from 'survey-core'
 
 class CustomSurveyModel implements ICustomSurveyModel {
   constructor(private model: Model) {}
+  public get onUploadFiles(): CustomOnUploadFiles {
+    return new CustomOnUploadFiles(this.model.onUploadFiles)
+  }
 
   public get onChoicesLazyLoad() {
     return new CustomOnChoicesLazyLoad(this.model.onChoicesLazyLoad)
