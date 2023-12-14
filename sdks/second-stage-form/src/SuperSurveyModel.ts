@@ -1,24 +1,17 @@
 import { Model } from 'survey-core'
+import { ICustomizableSurveyModel, SurveyModelCustomizer } from './interfaces'
 
-import { ICustomOnChoicesLazyLoad, ICustomOnUploadFiles, ICustomSurveyModel, ISuperSurveyModel } from './interfaces'
-import { CustomOnChoicesLazyLoad, CustomOnUploadFiles } from './services/custom'
-
-class CustomSurveyModel implements ICustomSurveyModel {
-  constructor(private model: Model) {}
-  public get onUploadFiles(): ICustomOnUploadFiles {
-    return new CustomOnUploadFiles(this.model.onUploadFiles)
-  }
-
-  public get onChoicesLazyLoad(): ICustomOnChoicesLazyLoad {
-    return new CustomOnChoicesLazyLoad(this.model.onChoicesLazyLoad)
-  }
-}
-
-export class SuperSurveyModel extends Model implements ISuperSurveyModel {
-  constructor(j?: any, c?: any) {
-    super(j, c)
-  }
-  public get custom(): ICustomSurveyModel {
-    return new CustomSurveyModel(this)
+export class CustomizableSurveyModel extends Model implements ICustomizableSurveyModel {
+  customize(customizer: SurveyModelCustomizer): this
+  customize(customizer: SurveyModelCustomizer[]): this
+  public customize(customizer: SurveyModelCustomizer | SurveyModelCustomizer[]): this {
+    if (customizer instanceof Array) {
+      for (const c of customizer) {
+        c(this)
+      }
+    } else {
+      customizer(this)
+    }
+    return this
   }
 }

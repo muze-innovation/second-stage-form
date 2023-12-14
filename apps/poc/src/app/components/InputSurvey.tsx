@@ -9,12 +9,16 @@ import { settings } from 'survey-core'
 
 // Models
 import { surveyJson } from '../models/example'
-import { SuperSurveyModel } from '@muze-library/second-stage-form'
+import {
+  CustomizableSurveyModel,
+  CustomOnChoiceLazyLoadBuilder,
+  CustomOnUploadFilesBuilder,
+} from '@muze-library/second-stage-form'
 
 export default function InputSurvey() {
   settings.showMaxLengthIndicator = false
   // States
-  const svy = new SuperSurveyModel(surveyJson)
+  const svy = new CustomizableSurveyModel(surveyJson)
   svy.applyTheme(theme)
 
   const validate = z.object({ lastName: z.string().min(1) })
@@ -37,14 +41,14 @@ export default function InputSurvey() {
     console.log('otps onValidateQuestion =>', otps.question.getAllErrors())
   })
 
-  svy.custom.onUploadFiles
+  const onUploadFiles = CustomOnUploadFilesBuilder.make()
     .add('*', async (s) => {
       return 'https://d1pjg4o0tbonat.cloudfront.net/content/dam/toshiba-aem/th/electric-water-boiler/conventional/plk-g33t/gallery2.jpg/jcr:content/renditions/cq5dam.web.5000.5000.jpeg'
     })
 
     .build()
 
-  svy.custom.onChoicesLazyLoad
+  const onChoicesLazyLoad = CustomOnChoiceLazyLoadBuilder.make()
     .add({ name: 'province' }, async (_, __) => {
       _.setValue('district', '')
       _.setValue('subdistrict', '')
@@ -97,6 +101,7 @@ export default function InputSurvey() {
     })
     .build()
 
+  svy.customize([onChoicesLazyLoad, onUploadFiles])
   return (
     <div className="bg-gray-100 p-6 flex flex-col gap-4">
       <Survey model={svy} />

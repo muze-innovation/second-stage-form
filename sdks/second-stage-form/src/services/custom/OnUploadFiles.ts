@@ -1,9 +1,9 @@
-import type { EventBase, SurveyModel, UploadFilesEvent } from 'survey-core'
-import { ICustomOnUploadFiles } from '../../interfaces'
+import type { Model, UploadFilesEvent } from 'survey-core'
+import { ICustomOnUploadFiles, SurveyModelCustomizer } from '../../interfaces'
 
-export class CustomOnUploadFiles implements ICustomOnUploadFiles {
-  constructor(private _uploadFiles: EventBase<SurveyModel, UploadFilesEvent>) {
-    //
+export class CustomOnUploadFilesBuilder implements ICustomOnUploadFiles {
+  public static make(): CustomOnUploadFilesBuilder {
+    return new CustomOnUploadFilesBuilder()
   }
   private cacheFunctions: Record<
     string,
@@ -43,34 +43,35 @@ export class CustomOnUploadFiles implements ICustomOnUploadFiles {
     return this
   }
   // add validate max file size
+  build(): SurveyModelCustomizer {
+    return (model: Model) => {
+      model.onUploadFiles.add(async (s, o) => {
+        const func = this.cacheFunctions[o.question.name] || this.cacheFunctions['*']
 
-  public async build(): Promise<void> {
-    this._uploadFiles.add(async (s, o) => {
-      const func = this.cacheFunctions['*'] || this.cacheFunctions[o.question.name]
-
-      if (!func) {
-        throw new Error('can not found custom function')
-      }
-      try {
-        this.validate(o)
-
-        for (const validate of func.validation) {
-          validate(o.files)
+        if (!func) {
+          throw new Error('cannot find custom function')
         }
+        try {
+          this.validate(o)
 
-        const resp = await Promise.all(o.files.map(func.callback))
+          for (const validate of func.validation) {
+            validate(o.files)
+          }
 
-        o.callback(
-          'success',
-          resp.map((r, i) => ({
-            file: o.files[i],
-            name: o.files[i].name,
-            content: r,
-          })),
-        )
-      } catch (error) {
-        o.callback('error', (error as any)?.message)
-      }
-    })
+          const resp = await Promise.all(o.files.map(func.callback))
+
+          o.callback(
+            'success',
+            resp.map((r, i) => ({
+              file: o.files[i],
+              name: o.files[i].name,
+              content: r,
+            })),
+          )
+        } catch (error) {
+          o.callback('error', (error as any)?.message)
+        }
+      })
+    }
   }
 }

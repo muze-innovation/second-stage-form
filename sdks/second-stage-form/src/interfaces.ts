@@ -14,44 +14,43 @@ export type CallbackFuction = (
   totalCount: number
 }>
 
-export interface ICustomOnChoicesLazyLoad {
-  build(): Promise<void>
-
-  add(indentity: '*', func: CallbackFuction): this
-  add(indentity: { name: string }, func: CallbackFuction): this
-  add(indentity: { type: string }, func: CallbackFuction): this
-  add(indentity: { name: string; type: string }, func: CallbackFuction): this
+export interface SurveyFileUploadValidatorScheme {
+  maxFileSize: string
 }
 
-export interface ICustomOnUploadFiles {
-  build(): Promise<void>
-  add(path: '*', func: (files: File) => Promise<string>, onValidate?: ((files: File[]) => Promise<string>)[]): this
+export type SurveyModelCustomizer = (model: Model) => void
+
+interface BaseCustomBuilder {
+  build(): SurveyModelCustomizer
+}
+/**
+ * modify onChoicesLazyLoad
+ * can enable / disable cache results
+ * can by pass callback to call api
+ * can debounce response from api
+ * */
+export interface ICustomOnChoicesLazyLoadBuilder extends BaseCustomBuilder {
+  add(identity: '*', func: CallbackFuction): this
+  add(identity: { name: string }, func: CallbackFuction): this
+  add(identity: { type: string }, func: CallbackFuction): this
+  add(identity: { name: string; type: string }, func: CallbackFuction): this
+}
+
+/**
+ * modify onUploadFiles
+ * can validate memtype of uploaded files per question
+ * can set max size of uploaded files per question
+ * can keep throw error
+ */
+export interface ICustomOnUploadFiles extends BaseCustomBuilder {
+  add(identity: '*', func: (files: File) => Promise<string>, onValidate?: ((files: File[]) => Promise<string>)[]): this
   add(
-    { name }: { name: string },
+    identity: { name: string },
     func: (files: File) => Promise<string>,
     onValidate?: ((files: File[]) => Promise<string>)[],
   ): this
 }
 
-// add more custom event
-export interface ICustomSurveyModel {
-  /**
-   * modify onChoicesLazyLoad
-   * can enable / disable cache results
-   * can by pass callback to call api
-   * can debounce response from api
-   * */
-  onChoicesLazyLoad: ICustomOnChoicesLazyLoad
-  /**
-   * modify onUploadFiles
-   * can validate memtype of uploaded files per question
-   * can set max size of uploaded files per question
-   * can keep throw error
-   */
-  onUploadFiles: ICustomOnUploadFiles
-}
-
-export interface ISuperSurveyModel extends Model {
-  // call custom for use custom build in function
-  custom: ICustomSurveyModel
+export interface ICustomizableSurveyModel extends Model {
+  customize(customizer: SurveyModelCustomizer): this
 }
