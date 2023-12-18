@@ -1,0 +1,17 @@
+{
+  "name": "@muze-library/second-stage-form",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "../../node_modules/.bin/tsup src/index.ts --format cjs,esm --dts --clean"
+  },
+  "dependencies": {
+    "survey-core": "^1.9.116"
+  }
+}

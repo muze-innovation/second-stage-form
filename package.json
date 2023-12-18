@@ -7,10 +7,12 @@
   "packageManager": "npm@9.5.1",
   "workspaces": [
     "packages/*",
-    "apps/*"
+    "apps/*",
+    "sdks/*"
   ],
   "dependencies": {
     "prettier": "^2.5.1",
+    "tsup": "^6.5.0",
     "turbo": "^1.10.15"
   }
 }
