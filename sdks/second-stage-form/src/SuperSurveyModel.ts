@@ -1,13 +1,16 @@
-import { Model } from 'survey-core'
+import { Model, settings } from 'survey-core'
 import { ICustomizableSurveyModel, SurveyModelCustomizer } from './interfaces'
 
 export class CustomizableSurveyModel extends Model implements ICustomizableSurveyModel {
-  displayPreview(data: any): Model {
+  toPreview(data: any): Model {
     // TODO: add class for cutom preview data here
-    // use uper.getPlainData()
+    // use this.jsonObj
     // can get data to convert to input
-    // call merge data to pre fill data to input
-    return new Model()
+    const converted = JSON.parse(JSON.stringify(this.jsonObj).replace(/dropdown/gm, 'text'))
+    const m = new CustomizableSurveyModel(converted)
+    m.mode = 'display'
+    settings.readOnlyTextRenderMode = 'div'
+    return m
   }
   customize(customizer: SurveyModelCustomizer): this
   customize(customizer: SurveyModelCustomizer[]): this

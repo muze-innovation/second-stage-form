@@ -18,7 +18,8 @@ import {
 export default function InputSurvey() {
   settings.showMaxLengthIndicator = false
   // States
-  const svy = new CustomizableSurveyModel(surveyJson)
+  const svy = new CustomizableSurveyModel(surveyJson).displayPreview()
+  svy.mergeData({ province: 'กทม' })
   svy.applyTheme(theme)
 
   const validate = z.object({ lastName: z.string().min(1) })
