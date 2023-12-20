@@ -43,14 +43,24 @@ export interface ICustomOnChoicesLazyLoadBuilder extends BaseCustomBuilder {
  * can keep throw error
  */
 export interface ICustomOnUploadFiles extends BaseCustomBuilder {
-  add(identity: '*', func: (files: File) => Promise<string>, onValidate?: ((files: File[]) => Promise<string>)[]): this
+  add(
+    identity: '*',
+    func: (files: File[]) => Promise<string[]>,
+    onValidate?: ((files: File[]) => Promise<string>)[],
+  ): this
   add(
     identity: { name: string },
-    func: (files: File) => Promise<string>,
+    func: (files: File[]) => Promise<string[]>,
     onValidate?: ((files: File[]) => Promise<string>)[],
   ): this
 }
 
+export interface IDisplayPreviewMode {
+  customizeImages: (name: this) => this
+  customizeChoices: (type: 'checkbox' | 'radio' | 'dropdown', name: this) => this
+}
+
 export interface ICustomizableSurveyModel extends Model {
   customize(customizer: SurveyModelCustomizer): this
+  displayPreview(data: any): Model
 }

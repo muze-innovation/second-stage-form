@@ -8,7 +8,7 @@ export class CustomOnUploadFilesBuilder implements ICustomOnUploadFiles {
   private cacheFunctions: Record<
     string,
     {
-      callback: (files: File) => Promise<string>
+      callback: (files: File[]) => Promise<string[]>
       validation: ((files: File[]) => Promise<string>)[]
     }
   > = {}
@@ -32,7 +32,7 @@ export class CustomOnUploadFilesBuilder implements ICustomOnUploadFiles {
 
   public add(
     path: '*' | { name: string },
-    func: (files: File) => Promise<string>,
+    func: (files: File[]) => Promise<string[]>,
     onValidate: ((files: File[]) => Promise<string>)[] = [],
   ): this {
     const key = typeof path === 'string' ? path : path.name
@@ -42,6 +42,11 @@ export class CustomOnUploadFilesBuilder implements ICustomOnUploadFiles {
     }
     return this
   }
+
+  public addCustomError(path: string) {
+    //
+  }
+
   // add validate max file size
   build(): SurveyModelCustomizer {
     return (model: Model) => {
@@ -58,7 +63,7 @@ export class CustomOnUploadFilesBuilder implements ICustomOnUploadFiles {
             validate(o.files)
           }
 
-          const resp = await Promise.all(o.files.map(func.callback))
+          const resp = await func.callback(o.files)
 
           o.callback(
             'success',

@@ -22,6 +22,7 @@ export default function InputSurvey() {
   svy.applyTheme(theme)
 
   const validate = z.object({ lastName: z.string().min(1) })
+
   svy.onServerValidateQuestions.add((_, otps) => {
     const validated = validate.safeParse(otps.data)
 
@@ -42,17 +43,19 @@ export default function InputSurvey() {
   })
 
   const onUploadFiles = CustomOnUploadFilesBuilder.make()
-    .add('*', async (s) => {
-      return 'https://d1pjg4o0tbonat.cloudfront.net/content/dam/toshiba-aem/th/electric-water-boiler/conventional/plk-g33t/gallery2.jpg/jcr:content/renditions/cq5dam.web.5000.5000.jpeg'
+    .add('*', async (f) => {
+      return f.map(
+        () =>
+          'https://d1pjg4o0tbonat.cloudfront.net/content/dam/toshiba-aem/th/electric-water-boiler/conventional/plk-g33t/gallery2.jpg/jcr:content/renditions/cq5dam.web.5000.5000.jpeg',
+      )
     })
-
     .build()
 
   const onChoicesLazyLoad = CustomOnChoiceLazyLoadBuilder.make()
-    .add({ name: 'province' }, async (_, __) => {
-      _.setValue('district', '')
-      _.setValue('subdistrict', '')
-      _.setValue('zipcode', '')
+    .add({ name: 'province' }, async (s, __) => {
+      s.setValue('district', '')
+      s.setValue('subdistrict', '')
+      s.setValue('zipcode', '')
       const url = 'http://localhost:5100/api/v1/master/addresses/province'
       const resp = await fetch(url, { method: 'GET' })
       const json = await resp.json()
@@ -62,10 +65,10 @@ export default function InputSurvey() {
         totalCount: json.data.length,
       } as any
     })
-    .add({ name: 'district' }, async (_, __) => {
-      const province = _.getValue('province')
-      _.setValue('subdistrict', '')
-      _.setValue('zipcode', '')
+    .add({ name: 'district' }, async (s, __) => {
+      const province = s.getValue('province')
+      s.setValue('subdistrict', '')
+      s.setValue('zipcode', '')
       const url = `http://localhost:5100/api/v1/master/addresses/district?provinceCode=${province}`
       const resp = await fetch(url, { method: 'GET' })
       const json = await resp.json()
@@ -74,11 +77,11 @@ export default function InputSurvey() {
         totalCount: json?.data?.length || 0,
       } as any
     })
-    .add({ name: 'subdistrict', type: 'dropdown' }, async (_, __) => {
-      const province = _.getValue('province')
-      const district = _.getValue('district')
+    .add({ name: 'subdistrict', type: 'dropdown' }, async (s, __) => {
+      const province = s.getValue('province')
+      const district = s.getValue('district')
 
-      _.setValue('zipcode', '')
+      s.setValue('zipcode', '')
       const url = `http://localhost:5100/api/v1/master/addresses/subdistrict?provinceCode=${province}&districtCode=${district}`
       const resp = await fetch(url, { method: 'GET' })
       const json = await resp.json()
@@ -87,10 +90,10 @@ export default function InputSurvey() {
         totalCount: json?.data?.length || 0,
       } as any
     })
-    .add({ name: 'zipcode' }, async (_, __) => {
-      const province = _.getValue('province')
-      const district = _.getValue('district')
-      const subdistrict = _.getValue('subdistrict')
+    .add({ name: 'zipcode' }, async (s, __) => {
+      const province = s.getValue('province')
+      const district = s.getValue('district')
+      const subdistrict = s.getValue('subdistrict')
       const url = `http://localhost:5100/api/v1/master/addresses/zipcode?provinceCode=${province}&districtCode=${district}&subdistrictCode=${subdistrict}`
       const resp = await fetch(url, { method: 'GET' })
       const json = await resp.json()
@@ -102,6 +105,7 @@ export default function InputSurvey() {
     .build()
 
   svy.customize([onChoicesLazyLoad, onUploadFiles])
+
   return (
     <div className="bg-gray-100 p-6 flex flex-col gap-4">
       <Survey model={svy} />
