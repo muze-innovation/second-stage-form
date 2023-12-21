@@ -1,5 +1,7 @@
 'use client'
 
+import iconCheck from '../../public/icons/icon-check-green.svg'
+
 // Zod
 import { z } from 'zod'
 // Survey
@@ -18,7 +20,18 @@ import {
 export default function InputSurvey() {
   settings.showMaxLengthIndicator = false
   // States
-  const svy = new CustomizableSurveyModel(surveyJson).displayPreview()
+  const svy = new CustomizableSurveyModel(surveyJson).toPreview(surveyJson)
+
+  console.log('icon ----->< ', iconCheck)
+
+  // svy.onTextMarkdown.add(function (_, options) {
+  //   // Convert Markdown to HTML
+  //   console.log('options ======> ', options.text)
+
+  //   // options.html = str;
+  //   options.html = iconCheck.src ? `<img src="${iconCheck.src}"/>` : '<></>'
+  // })
+
   svy.mergeData({ province: 'กทม' })
   svy.applyTheme(theme)
 

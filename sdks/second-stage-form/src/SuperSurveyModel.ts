@@ -1,5 +1,6 @@
 import { Model, settings } from 'survey-core'
 import { ICustomizableSurveyModel, SurveyModelCustomizer } from './interfaces'
+// const iconCheck = require('./public/icons/icon-check-green.svg')
 
 export class CustomizableSurveyModel extends Model implements ICustomizableSurveyModel {
   toPreview(data: any): Model {
@@ -10,6 +11,14 @@ export class CustomizableSurveyModel extends Model implements ICustomizableSurve
     const m = new CustomizableSurveyModel(converted)
     m.mode = 'display'
     settings.readOnlyTextRenderMode = 'div'
+    // m.onTextMarkdown.add(function (_, options) {
+    //   // Convert Markdown to HTML
+    //   console.log('options ======> ', options.text)
+    //   console.log('iconcheck ======= ', iconCheck)
+
+    //   // options.html = str;
+    //   // options.html = `<img src="${iconCheck}" />`
+    // })
     return m
   }
   customize(customizer: SurveyModelCustomizer): this
