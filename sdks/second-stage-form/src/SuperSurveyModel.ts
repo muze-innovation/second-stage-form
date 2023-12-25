@@ -3,8 +3,8 @@ import { ICustomizableSurveyModel, SurveyModelCustomizer } from './interfaces'
 import { DisplayPreviewMode } from './services/custom/OnPreviewMode'
 
 export class CustomizableSurveyModel extends Model implements ICustomizableSurveyModel {
-  toPreview(): Model {
-    return DisplayPreviewMode.customizeInput(this.jsonObj)
+  toPreview(display: DisplayPreviewMode, data: any): CustomizableSurveyModel {
+    return display.renderPreview(this.jsonObj, data)
   }
   customize(customizer: SurveyModelCustomizer): this
   customize(customizer: SurveyModelCustomizer[]): this

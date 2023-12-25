@@ -13,19 +13,19 @@ import {
   CustomizableSurveyModel,
   CustomOnChoiceLazyLoadBuilder,
   CustomOnUploadFilesBuilder,
+  DisplayPreviewMode,
 } from '@muze-library/second-stage-form'
 
 export default function InputSurvey() {
   settings.showMaxLengthIndicator = false
   // States
-  const svy = new CustomizableSurveyModel(surveyJson).toPreview()
-  console.log('svy =======> ', svy.jsonObj)
+  const svy = new CustomizableSurveyModel(surveyJson)
 
   // Preview Survey Model
-  const previewSvy = new CustomizableSurveyModel(surveyJson).toPreview()
-  console.log('previewSvy =======> ', previewSvy.jsonObj)
-  previewSvy.mergeData({ province: 'กทม', membership: 'ใช่' })
-  previewSvy.applyTheme(theme)
+  const previewSvy = new CustomizableSurveyModel(surveyJson).toPreview(DisplayPreviewMode.make(), {
+    province: 'กทม',
+    membership: 'ใช่',
+  })
 
   // svy.onTextMarkdown.add(function (_, options) {
   //   // Convert Markdown to HTML
@@ -35,7 +35,6 @@ export default function InputSurvey() {
   //   options.html = iconCheck.src ? `<img src="${iconCheck.src}"/>` : '<></>'
   // })
 
-  svy.mergeData({ province: 'กทม', membership: 'ใช่' })
   svy.applyTheme(theme)
 
   const validate = z.object({ lastName: z.string().min(1) })

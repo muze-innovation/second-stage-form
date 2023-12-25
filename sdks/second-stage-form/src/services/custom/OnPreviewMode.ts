@@ -1,47 +1,69 @@
-import { Model, QuestionCheckboxModel, QuestionDropdownModel, QuestionRadiogroupModel, settings } from 'survey-core'
-import { IDisplayPreviewMode } from 'src/interfaces'
-import { CustomizableSurveyModel } from 'src/SuperSurveyModel'
+import type { IQuestionPlainData } from 'survey-core/typings/question'
+import type { TextMarkdownEvent } from 'survey-core'
+
+import { Model, settings } from 'survey-core'
+import { CustomizableSurveyModel } from '../../SuperSurveyModel'
+
 const iconCheck = require('../../public/icons/icon-check-green.svg')
 
-export class DisplayPreviewMode extends Model implements IDisplayPreviewMode {
-  public customizeImages(name: this): this {
+// TODO: add more other case
+export abstract class DisplayPreview extends CustomizableSurveyModel {
+  protected customizeImages(name: this): string {
     // TODO: implement that can customize icon on prefix text preview
-    return this
+    return ''
   }
 
-  public static customizeInput(surveyJson: any): CustomizableSurveyModel {
-    const converted = JSON.parse(JSON.stringify(surveyJson).replace(/checkbox|radiogroup|dropdown/gm, 'text'))
-    const csm = new CustomizableSurveyModel(surveyJson)
+  protected customizeCheckboxRender(data: IQuestionPlainData): string {
+    // TODO: implement that can customize icon on prefix text preview
+    return `
+      <div>
+        <img src="${iconCheck}" />
+        <p> ${data.title} </p>
+      </div>
+    `
+  }
 
-    csm.onTextMarkdown.add(function (_, options) {
-      // Convert Markdown to HTML
-      // TODO: check QuestionDropdownModel type
-      // TODO: check CheckboxModel type or CheckboxBase
-      // TODO: add default check icon for preview radiogroup
-      console.log('sender ------> ', _, 'options ------> ', options)
-      const s = _.getAllQuestions().filter(
-        (q) =>
-          q instanceof QuestionDropdownModel ||
-          q instanceof QuestionRadiogroupModel ||
-          q instanceof QuestionCheckboxModel,
-      )
-      options.element.isRequired = false
-      if (options.element instanceof QuestionDropdownModel) {
-        options.html = `<img src="${iconCheck}" />`
-      } else {
+  protected senderManager(type: string, data: IQuestionPlainData, options: TextMarkdownEvent): void {
+    switch (type) {
+      // FIXME: change case to checkbox
+      case 'dropdown':
+        options.html = this.customizeCheckbox(data)
+        break
+      // TODO: add more other case
+      default:
         options.html = options.text
+        break
+    }
+  }
+  public renderPreview(surveyJson: any, data: any): CustomizableSurveyModel {
+    const cloned = new Model(JSON.parse(JSON.stringify(surveyJson)))
+
+    const converted = JSON.parse(JSON.stringify(surveyJson).replace(/checkbox|radiogroup|dropdown/gm, 'text'))
+    const csm = new CustomizableSurveyModel(converted)
+    csm.mergeData(data)
+    cloned.mergeData(data)
+
+    const p = cloned.getPlainData()
+
+    csm.onTextMarkdown.add((_, options) => {
+      const found = p.find((o) => o.name === options.element.name)
+      if (!found) {
+        // skip if not found elemant in schema
+        return
       }
+      // detech type of question
+      const type = cloned.getQuestionByName(options.element.name).getType()
+      this.senderManager(type, found, options)
     })
-    // const m = new CustomizableSurveyModel(this.jsonObj)
-    // console.log('customized model ----> ', m)
-    // console.log('preview model -----> ', this)
-    // this.jsonObj = converted
+
     csm.mode = 'display'
     settings.readOnlyTextRenderMode = 'div'
-    const newJson = csm.toJSON()
-
-    // console.log('newJson -----> ', newJson)
-    // const previewModel = new CustomizableSurveyModel(converted)
     return csm
+  }
+}
+
+export class DisplayPreviewMode extends DisplayPreview {
+  public static make() {
+    return new DisplayPreviewMode()
   }
 }

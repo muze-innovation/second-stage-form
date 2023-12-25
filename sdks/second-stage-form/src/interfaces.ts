@@ -62,5 +62,4 @@ export interface IDisplayPreviewMode {
 
 export interface ICustomizableSurveyModel extends Model {
   customize(customizer: SurveyModelCustomizer): this
-  toPreview(): Model
 }
