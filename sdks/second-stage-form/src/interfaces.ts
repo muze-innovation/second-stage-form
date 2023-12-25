@@ -56,11 +56,11 @@ export interface ICustomOnUploadFiles extends BaseCustomBuilder {
 }
 
 export interface IDisplayPreviewMode {
-  customizeImages: (name: this) => this
-  customizeChoices: (type: 'checkbox' | 'radio' | 'dropdown', name: this) => this
+  customizeImages: (name: this) => Model
+  // customizeInput: () => this
 }
 
 export interface ICustomizableSurveyModel extends Model {
   customize(customizer: SurveyModelCustomizer): this
-  toPreview(data: any): Model
+  toPreview(): Model
 }

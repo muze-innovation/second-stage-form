@@ -1,7 +1,5 @@
 'use client'
 
-import iconCheck from '../../public/icons/icon-check-green.svg'
-
 // Zod
 import { z } from 'zod'
 // Survey
@@ -20,9 +18,14 @@ import {
 export default function InputSurvey() {
   settings.showMaxLengthIndicator = false
   // States
-  const svy = new CustomizableSurveyModel(surveyJson).toPreview(surveyJson)
+  const svy = new CustomizableSurveyModel(surveyJson).toPreview()
+  console.log('svy =======> ', svy.jsonObj)
 
-  console.log('icon ----->< ', iconCheck)
+  // Preview Survey Model
+  const previewSvy = new CustomizableSurveyModel(surveyJson).toPreview()
+  console.log('previewSvy =======> ', previewSvy.jsonObj)
+  previewSvy.mergeData({ province: 'กทม', membership: 'ใช่' })
+  previewSvy.applyTheme(theme)
 
   // svy.onTextMarkdown.add(function (_, options) {
   //   // Convert Markdown to HTML
@@ -32,7 +35,7 @@ export default function InputSurvey() {
   //   options.html = iconCheck.src ? `<img src="${iconCheck.src}"/>` : '<></>'
   // })
 
-  svy.mergeData({ province: 'กทม' })
+  svy.mergeData({ province: 'กทม', membership: 'ใช่' })
   svy.applyTheme(theme)
 
   const validate = z.object({ lastName: z.string().min(1) })
@@ -118,11 +121,11 @@ export default function InputSurvey() {
     })
     .build()
 
-  svy.customize([onChoicesLazyLoad, onUploadFiles])
+  // svy.customize([onChoicesLazyLoad, onUploadFiles])
 
   return (
     <div className="bg-gray-100 p-6 flex flex-col gap-4">
-      <Survey model={svy} />
+      <Survey model={previewSvy} />
     </div>
   )
 }
