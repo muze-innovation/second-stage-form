@@ -4,9 +4,8 @@ import type { TextMarkdownEvent } from 'survey-core'
 import { Model, settings } from 'survey-core'
 import { CustomizableSurveyModel } from '../../SuperSurveyModel'
 
-const iconCheck = require('../../public/icons/icon-check-green.svg')
-
 // TODO: add more other case
+
 export abstract class DisplayPreview extends CustomizableSurveyModel {
   protected customizeImages(name: this): string {
     // TODO: implement that can customize icon on prefix text preview
@@ -16,18 +15,30 @@ export abstract class DisplayPreview extends CustomizableSurveyModel {
   protected customizeCheckboxRender(data: IQuestionPlainData): string {
     // TODO: implement that can customize icon on prefix text preview
     return `
-      <div>
-        <img src="${iconCheck}" />
-        <p> ${data.title} </p>
+      <div style="display: flex; justify-items: center; align-items: center; gap: 0.5rem;">
+        <svg width="16" height="16"><use href="#icon-v2check"></use></svg>
+        <p> ${data.displayValue} </p>
+      </div>
+    `
+  }
+
+  protected customizeRadioGroupRender(data: IQuestionPlainData): string {
+    // TODO: hide old input text component
+    return `
+      <div style="display: flex; justify-items: center; align-items: center; gap: 0.5rem;">
+        <svg width="16" height="16"><use href="#icon-v2check"></use></svg>
+        <p> ${data.displayValue} </p>
       </div>
     `
   }
 
   protected senderManager(type: string, data: IQuestionPlainData, options: TextMarkdownEvent): void {
     switch (type) {
-      // FIXME: change case to checkbox
-      case 'dropdown':
+      case 'checkbox':
         options.html = this.customizeCheckboxRender(data)
+        break
+      case 'radiogroup':
+        options.html = this.customizeRadioGroupRender(data)
         break
       // TODO: add more other case
       default:
@@ -35,11 +46,27 @@ export abstract class DisplayPreview extends CustomizableSurveyModel {
         break
     }
   }
+
+  // FIXME: not work in visibleIf case
+  protected replaceIsRequiredWithFalse(obj: any) {
+    if (obj.hasOwnProperty('isRequired')) {
+      obj.isRequired = false
+    }
+
+    for (const key in obj) {
+      if (obj[key] !== null && typeof obj[key] === 'object') {
+        this.replaceIsRequiredWithFalse(obj[key])
+      }
+    }
+  }
+
   public renderPreview(surveyJson: any, data: any): CustomizableSurveyModel {
     const cloned = new Model(JSON.parse(JSON.stringify(surveyJson)))
 
     const converted = JSON.parse(JSON.stringify(surveyJson).replace(/checkbox|radiogroup|dropdown/gm, 'text'))
+    this.replaceIsRequiredWithFalse(converted)
     const csm = new CustomizableSurveyModel(converted)
+
     csm.mergeData(data)
     cloned.mergeData(data)
 
@@ -55,6 +82,8 @@ export abstract class DisplayPreview extends CustomizableSurveyModel {
       const type = cloned.getQuestionByName(options.element.name).getType()
       this.senderManager(type, found, options)
     })
+
+    // TODO: applyTheme for preview custom input
 
     csm.mode = 'display'
     settings.readOnlyTextRenderMode = 'div'
