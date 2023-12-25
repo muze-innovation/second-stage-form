@@ -27,7 +27,7 @@ export abstract class DisplayPreview extends CustomizableSurveyModel {
     switch (type) {
       // FIXME: change case to checkbox
       case 'dropdown':
-        options.html = this.customizeCheckbox(data)
+        options.html = this.customizeCheckboxRender(data)
         break
       // TODO: add more other case
       default:
