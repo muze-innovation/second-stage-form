@@ -15,7 +15,11 @@ export type CallbackFuction = (
 }>
 
 export interface SurveyFileUploadValidatorScheme {
-  maxFileSize: string
+  maxFileSize: number
+  maxFiles: number
+  maxTotalFileSize: number
+  enableZoomInModal: boolean
+  modalMaxWidth?: number
 }
 
 export type SurveyModelCustomizer = (model: Model) => void
@@ -47,6 +51,8 @@ export interface ICustomOnUploadFiles extends BaseCustomBuilder {
     identity: '*',
     func: (files: File[]) => Promise<string[]>,
     onValidate?: ((files: File[]) => Promise<string>)[],
+    onOpenModal?: () => void,
+    onCloseModal?: () => void,
   ): this
   add(
     identity: { name: string },
