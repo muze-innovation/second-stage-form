@@ -1,21 +1,23 @@
 import type { IQuestionPlainData } from 'survey-core/typings/question'
 import type { TextMarkdownEvent } from 'survey-core'
+import type { SurveyModelCustomizer } from '../../interfaces'
 
 import { Model, settings } from 'survey-core'
-import { CustomizableSurveyModel } from '../../SuperSurveyModel'
-import { SurveyModelCustomizer } from '../../interfaces'
 
 // TODO: add more other case
 
-export abstract class DisplayPreview extends CustomizableSurveyModel {
+export abstract class DisplayPreview {
   protected customizeImages(name: this): string {
     // TODO: implement that can customize icon on prefix text preview
     return ''
   }
 
-  // FIXME: WTF this korn
   protected customizeCheckboxRender(data: IQuestionPlainData): string {
-    return new DisplayPreviewMode().renderPreviewInput(data)
+    return `
+    <div class="sd-text__content sd-question__content" style="display: flex; justify-items: center; align-items: center; gap: 0.5rem;">
+      <svg width="16" height="16"><use href="#icon-v2check"></use></svg>
+      <div> ${data.displayValue} </div>
+    </div>`
   }
 
   protected customizeRadioGroupRender(data: IQuestionPlainData): string {
@@ -54,12 +56,16 @@ export abstract class DisplayPreview extends CustomizableSurveyModel {
     }
   }
 
-  protected deleteValueByType = ['checkbox', 'radiogroup']
+  // for case modify title question inject html
+  protected hiddenValueByType = ['checkbox', 'radiogroup']
+  // for case display mode
+  protected convertToTypeText = ['checkbox', 'radiogroup', 'dropdown']
 
   public build(): SurveyModelCustomizer {
     return (model: Model) => {
       const cloned = new Model(JSON.parse(JSON.stringify(model.schema)))
-      const converted = JSON.parse(JSON.stringify(model.schema).replace(/checkbox|radiogroup|dropdown/gm, 'text'))
+      const regex = new RegExp(this.convertToTypeText.join('|'), 'gm')
+      const converted = JSON.parse(JSON.stringify(model.schema).replace(regex, 'text'))
       this.replaceIsRequiredWithFalse(converted)
 
       model.setJsonObject(converted)
@@ -80,7 +86,8 @@ export abstract class DisplayPreview extends CustomizableSurveyModel {
       for (const pd of p) {
         const name = pd.name.toString()
         const type = cloned.getQuestionByName(name).getType()
-        if (this.deleteValueByType.includes(type)) {
+
+        if (this.hiddenValueByType.includes(type)) {
           model.clearValue(name)
         }
       }
@@ -96,15 +103,5 @@ export abstract class DisplayPreview extends CustomizableSurveyModel {
 export class DisplayPreviewMode extends DisplayPreview {
   public static make() {
     return new DisplayPreviewMode()
-  }
-
-  // FIXME: WTF this korn
-  public renderPreviewInput(data: IQuestionPlainData): string {
-    return `
-    <div class="sd-text__content sd-question__content" style="display: flex; justify-items: center; align-items: center; gap: 0.5rem;">
-      <svg width="16" height="16"><use href="#icon-v2check"></use></svg>
-      <div> ${data.displayValue} </div>
-    </div>
-  `
   }
 }
