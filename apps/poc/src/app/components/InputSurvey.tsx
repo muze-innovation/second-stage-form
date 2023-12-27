@@ -20,6 +20,8 @@ export default function InputSurvey() {
   const svy = new CustomizableSurveyModel(surveyJson)
   // Preview Survey Model
   const superSurveyTheme = CustomizableSurveyModel.defaultTheme()
+  superSurveyTheme.cssVariables['--sjs-primary-backcolor'] = '#D92D20'
+
   svy.applyTheme(superSurveyTheme)
 
   svy.onValidateQuestion.add((_, otps) => {

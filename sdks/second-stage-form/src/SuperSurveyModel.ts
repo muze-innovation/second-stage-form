@@ -1,9 +1,10 @@
 import { Model } from 'survey-core'
 import { ICustomizableSurveyModel, SurveyModelCustomizer } from './interfaces'
 import { theme } from './themes/_theme'
+import { ISuperTheme } from './themes/interfaces'
 
 export class CustomizableSurveyModel extends Model implements ICustomizableSurveyModel {
-  public static defaultTheme(): any {
+  public static defaultTheme(): ISuperTheme {
     return theme
   }
 
