@@ -26,6 +26,7 @@ export const surveyJson = {
                   description: 'ประเภทไฟล์ .jpg, .jpeg, .png (ขนาดรูปไม่เกิน 1 MB)',
                   hideNumber: true,
                   isRequired: true,
+                  showPreview: true,
                   requiredErrorText: 'กรุณาอัปโหลดรูปภาพ',
                   allowMultiple: true,
                   acceptedTypes: 'image/png, image/jpeg',
@@ -33,8 +34,41 @@ export const surveyJson = {
                   waitForUpload: true,
                   maxSize: 1048576,
                   needConfirmRemoveFile: true,
-                  maxFiles: 5,
+                  custom: {
+                    maxFiles: 2,
+                    maxTotalFileSize: 10240000,
+                    maxFilesErrorText: 'maxFilesErrorText (from json)', // This works but it duplicates in every survey
+                    enableZoomInModal: true,
+                    modalMaxWidth: 700,
+                    // TODO
+                    // DISCUSS: don't want this for localization. 
+                    // maxFilesErrorText: {
+                    //   en: '',
+                    //   th: '',
+                    // },
+                    // (1) Maybe try to do this
+                    // maxFilesErrorText: t('common:error.maxFiles'))
+                    // (2) or
+                    // maxFilesErrorText: 'common:error.maxFiles'
+                    // (3) set in code
+                  },
+
                 },
+                {
+                  type: 'file',
+                  name: 'disable-images',
+                  title: 'test disable images',
+                  hideNumber: true,
+                  isRequired: false,
+                  showPreview: true,
+                  requiredErrorText: 'กรุณาอัปโหลดรูปภาพ',
+                  allowMultiple: true,
+                  acceptedTypes: 'image/png, image/jpeg',
+                  storeDataAsText: false,
+                  waitForUpload: true,
+                  maxSize: 1048576,
+                  needConfirmRemoveFile: true,
+                }
               ],
               title: 'อัปโหลดรูปภาพ',
             },
