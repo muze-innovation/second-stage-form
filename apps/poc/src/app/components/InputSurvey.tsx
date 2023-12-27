@@ -3,7 +3,7 @@
 // Survey
 import { Survey } from 'survey-react-ui'
 import { theme } from '../models/_theme'
-import { settings } from 'survey-core'
+import { ITheme, settings } from 'survey-core'
 
 // Models
 import { surveyJson } from '../models/example'
@@ -12,6 +12,7 @@ import {
   CustomOnChoiceLazyLoadBuilder,
   CustomOnUploadFilesBuilder,
   DisplayPreviewMode,
+  superSurveyTheme,
 } from '@muze-library/second-stage-form'
 
 export default function InputSurvey() {
@@ -19,10 +20,11 @@ export default function InputSurvey() {
   // States
   const svy = new CustomizableSurveyModel(surveyJson)
   // Preview Survey Model
-  const superSurveyTheme = CustomizableSurveyModel.defaultTheme()
-  superSurveyTheme.cssVariables['--sjs-primary-backcolor'] = '#D92D20'
 
-  svy.applyTheme(superSurveyTheme)
+  // Example for Custom Theme
+  const customTheme: ITheme = { ...superSurveyTheme, cssVariables: { '--sjs-primary-backcolor': '#D92D20' } }
+
+  svy.applyTheme(customTheme)
 
   svy.onValidateQuestion.add((_, otps) => {
     console.log('otps onValidateQuestion =>', otps.question.getAllErrors())

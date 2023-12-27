@@ -1,5 +1,4 @@
 import type { ChoicesLazyLoadEvent, Model } from 'survey-core'
-import { ISuperTheme } from './themes/interfaces'
 
 export type CallbackFuction = (
   sender: Model,
