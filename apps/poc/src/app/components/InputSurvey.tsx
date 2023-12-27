@@ -36,7 +36,6 @@ export default function InputSurvey() {
   // })
 
   svy.applyTheme(theme)
-  previewSvy.applyTheme(theme)
 
   const validate = z.object({ lastName: z.string().min(1) })
 
