@@ -3,6 +3,7 @@ import type { TextMarkdownEvent } from 'survey-core'
 
 import { Model, settings } from 'survey-core'
 import { CustomizableSurveyModel } from '../../SuperSurveyModel'
+import { SurveyModelCustomizer } from '../../interfaces'
 
 // TODO: add more other case
 
@@ -55,42 +56,40 @@ export abstract class DisplayPreview extends CustomizableSurveyModel {
 
   protected deleteValueByType = ['checkbox', 'radiogroup']
 
-  public renderPreview(surveyJson: any, data: any, model: CustomizableSurveyModel): CustomizableSurveyModel {
-    const cloned = new Model(JSON.parse(JSON.stringify(surveyJson)))
+  public build(): SurveyModelCustomizer {
+    return (model: Model) => {
+      const cloned = new Model(JSON.parse(JSON.stringify(model.schema)))
+      const converted = JSON.parse(JSON.stringify(model.schema).replace(/checkbox|radiogroup|dropdown/gm, 'text'))
+      this.replaceIsRequiredWithFalse(converted)
 
-    const converted = JSON.parse(JSON.stringify(surveyJson).replace(/checkbox|radiogroup|dropdown/gm, 'text'))
-    this.replaceIsRequiredWithFalse(converted)
+      model.setJsonObject(converted)
+      cloned.mergeData(model.data)
 
-    model.setJsonObject(converted)
+      const p = cloned.getPlainData()
+      model.onTextMarkdown.add((_, options) => {
+        const found = p.find((o) => o.name === options.element.name)
+        if (!found) {
+          // skip if not found elemant in schema
+          return
+        }
+        // detech type of question
+        const type = cloned.getQuestionByName(options.element.name).getType()
+        this.senderManager(type, found, options)
+      })
 
-    cloned.mergeData(data)
-    const newData = { ...data }
-
-    const p = cloned.getPlainData()
-    model.onTextMarkdown.add((_, options) => {
-      const found = p.find((o) => o.name === options.element.name)
-      if (!found) {
-        // skip if not found elemant in schema
-        return
+      for (const pd of p) {
+        const name = pd.name.toString()
+        const type = cloned.getQuestionByName(name).getType()
+        if (this.deleteValueByType.includes(type)) {
+          model.clearValue(name)
+        }
       }
-      // detech type of question
-      const type = cloned.getQuestionByName(options.element.name).getType()
 
-      this.senderManager(type, found, options)
-    })
+      model.mode = 'display'
+      settings.readOnlyTextRenderMode = 'div'
 
-    for (const pd of p) {
-      const type = cloned.getQuestionByName(pd.name.toString()).getType()
-      if (this.deleteValueByType.includes(type)) {
-        delete newData[pd.name]
-      }
+      return model
     }
-
-    model.mergeData(newData)
-    model.mode = 'display'
-    settings.readOnlyTextRenderMode = 'div'
-
-    return model
   }
 }
 

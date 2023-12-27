@@ -17,13 +17,9 @@ import {
 export default function InputSurvey() {
   settings.showMaxLengthIndicator = false
   // States
-  const svy = new CustomizableSurveyModel(surveyJson).toPreview(DisplayPreviewMode.make(), {
-    province: 'กทม',
-    membership: 'ใช่',
-    address: 'test',
-  })
-  const superSurveyTheme = CustomizableSurveyModel.defaultTheme()
+  const svy = new CustomizableSurveyModel(surveyJson)
   // Preview Survey Model
+  const superSurveyTheme = CustomizableSurveyModel.defaultTheme()
   svy.applyTheme(superSurveyTheme)
 
   svy.onValidateQuestion.add((_, otps) => {
@@ -92,7 +88,10 @@ export default function InputSurvey() {
     })
     .build()
 
-  svy.customize([onChoicesLazyLoad, onUploadFiles])
+  const renderPreview = DisplayPreviewMode.make().build()
+
+  svy.mergeData({ province: 'กทม', membership: 'ใช่', address: 'test' })
+  svy.customize([onChoicesLazyLoad, onUploadFiles, renderPreview])
 
   return (
     <div className="bg-gray-100 p-6 flex flex-col gap-4">
