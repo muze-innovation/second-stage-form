@@ -60,18 +60,20 @@ export abstract class DisplayPreview extends CustomizableSurveyModel {
     }
   }
 
+  protected deleteValueByType = ['checkbox', 'radiogroup']
+
   public renderPreview(surveyJson: any, data: any): CustomizableSurveyModel {
     const cloned = new Model(JSON.parse(JSON.stringify(surveyJson)))
 
     const converted = JSON.parse(JSON.stringify(surveyJson).replace(/checkbox|radiogroup|dropdown/gm, 'text'))
     this.replaceIsRequiredWithFalse(converted)
+
     const csm = new CustomizableSurveyModel(converted)
 
-    csm.mergeData(data)
     cloned.mergeData(data)
+    const newData = { ...data }
 
     const p = cloned.getPlainData()
-
     csm.onTextMarkdown.add((_, options) => {
       const found = p.find((o) => o.name === options.element.name)
       if (!found) {
@@ -80,11 +82,18 @@ export abstract class DisplayPreview extends CustomizableSurveyModel {
       }
       // detech type of question
       const type = cloned.getQuestionByName(options.element.name).getType()
+
       this.senderManager(type, found, options)
     })
 
-    // TODO: applyTheme for preview custom input
+    for (const pd of p) {
+      const type = cloned.getQuestionByName(pd.name.toString()).getType()
+      if (this.deleteValueByType.includes(type)) {
+        delete newData[pd.name]
+      }
+    }
 
+    csm.mergeData(newData)
     csm.mode = 'display'
     settings.readOnlyTextRenderMode = 'div'
     return csm

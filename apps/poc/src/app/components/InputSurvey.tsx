@@ -1,7 +1,5 @@
 'use client'
 
-// Zod
-import { z } from 'zod'
 // Survey
 import { Survey } from 'survey-react-ui'
 import { theme } from '../models/_theme'
@@ -19,42 +17,15 @@ import {
 export default function InputSurvey() {
   settings.showMaxLengthIndicator = false
   // States
-  const svy = new CustomizableSurveyModel(surveyJson)
-
-  // Preview Survey Model
-  const previewSvy = new CustomizableSurveyModel(surveyJson).toPreview(DisplayPreviewMode.make(), {
+  const svy = new CustomizableSurveyModel(surveyJson).toPreview(DisplayPreviewMode.make(), {
     province: 'กทม',
     membership: 'ใช่',
+    address: 'test',
   })
 
-  // svy.onTextMarkdown.add(function (_, options) {
-  //   // Convert Markdown to HTML
-  //   console.log('options ======> ', options.text)
-
-  //   // options.html = str;
-  //   options.html = iconCheck.src ? `<img src="${iconCheck.src}"/>` : '<></>'
-  // })
-
+  // Preview Survey Model
   svy.applyTheme(theme)
-  previewSvy.applyTheme(theme)
 
-  const validate = z.object({ lastName: z.string().min(1) })
-
-  svy.onServerValidateQuestions.add((_, otps) => {
-    const validated = validate.safeParse(otps.data)
-
-    if (!validated.success) {
-      const error = validated.error.formErrors
-      const keysOfErrors = Object.keys(error.fieldErrors)
-      for (const key of keysOfErrors) {
-        const value = (error.fieldErrors as any)[key]?.join(', ')
-
-        otps.errors[key] = value
-      }
-
-      otps.complete()
-    }
-  })
   svy.onValidateQuestion.add((_, otps) => {
     console.log('otps onValidateQuestion =>', otps.question.getAllErrors())
   })
@@ -121,11 +92,11 @@ export default function InputSurvey() {
     })
     .build()
 
-  // svy.customize([onChoicesLazyLoad, onUploadFiles])
+  svy.customize([onChoicesLazyLoad, onUploadFiles])
 
   return (
     <div className="bg-gray-100 p-6 flex flex-col gap-4">
-      <Survey model={previewSvy} />
+      <Survey model={svy} />
     </div>
   )
 }
