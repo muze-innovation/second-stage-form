@@ -22,9 +22,9 @@ export default function InputSurvey() {
     membership: 'ใช่',
     address: 'test',
   })
-
+  const superSurveyTheme = CustomizableSurveyModel.defaultTheme()
   // Preview Survey Model
-  svy.applyTheme(theme)
+  svy.applyTheme(superSurveyTheme)
 
   svy.onValidateQuestion.add((_, otps) => {
     console.log('otps onValidateQuestion =>', otps.question.getAllErrors())

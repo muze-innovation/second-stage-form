@@ -18,7 +18,6 @@ export abstract class DisplayPreview extends CustomizableSurveyModel {
   }
 
   protected customizeRadioGroupRender(data: IQuestionPlainData): string {
-    // TODO: hide old input text component
     return `
       <div class="sd-text__content sd-question__content" style="display: flex; justify-items: center; align-items: center; gap: 0.5rem;">
         <div> ${data.displayValue} </div>
