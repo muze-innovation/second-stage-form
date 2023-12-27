@@ -5,13 +5,10 @@ import { theme } from './themes/_theme'
 
 export class CustomizableSurveyModel extends Model implements ICustomizableSurveyModel {
   toPreview(display: DisplayPreviewMode, data: any): CustomizableSurveyModel {
-    const displayMode = display.renderPreview(this.jsonObj, data)
     // FIXME: fuck this remove here
-    const displayTheme = Object.keys(display.themeVariables).length === 0 ? theme : display.themeVariables
-
-    displayMode.applyTheme(displayTheme)
-
-    return displayMode
+    // const displayTheme = Object.keys(display.themeVariabless).length === 0 ? theme : display.themeVariables
+    // displayMode.applyTheme(displayTheme)
+    return display.renderPreview(this.jsonObj, data, this)
   }
 
   customize(customizer: SurveyModelCustomizer): this

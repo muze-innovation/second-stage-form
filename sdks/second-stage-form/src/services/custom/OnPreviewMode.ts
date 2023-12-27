@@ -56,19 +56,19 @@ export abstract class DisplayPreview extends CustomizableSurveyModel {
 
   protected deleteValueByType = ['checkbox', 'radiogroup']
 
-  public renderPreview(surveyJson: any, data: any): CustomizableSurveyModel {
+  public renderPreview(surveyJson: any, data: any, model: CustomizableSurveyModel): CustomizableSurveyModel {
     const cloned = new Model(JSON.parse(JSON.stringify(surveyJson)))
 
     const converted = JSON.parse(JSON.stringify(surveyJson).replace(/checkbox|radiogroup|dropdown/gm, 'text'))
     this.replaceIsRequiredWithFalse(converted)
 
-    const csm = new CustomizableSurveyModel(converted)
+    model.setJsonObject(converted)
 
     cloned.mergeData(data)
     const newData = { ...data }
 
     const p = cloned.getPlainData()
-    csm.onTextMarkdown.add((_, options) => {
+    model.onTextMarkdown.add((_, options) => {
       const found = p.find((o) => o.name === options.element.name)
       if (!found) {
         // skip if not found elemant in schema
@@ -87,11 +87,11 @@ export abstract class DisplayPreview extends CustomizableSurveyModel {
       }
     }
 
-    csm.mergeData(newData)
-    csm.mode = 'display'
+    model.mergeData(newData)
+    model.mode = 'display'
     settings.readOnlyTextRenderMode = 'div'
 
-    return csm
+    return model
   }
 }
 
@@ -100,6 +100,7 @@ export class DisplayPreviewMode extends DisplayPreview {
     return new DisplayPreviewMode()
   }
 
+  // FIXME: WTF this korn
   public renderPreviewInput(data: IQuestionPlainData): string {
     return `
     <div class="sd-text__content sd-question__content" style="display: flex; justify-items: center; align-items: center; gap: 0.5rem;">
