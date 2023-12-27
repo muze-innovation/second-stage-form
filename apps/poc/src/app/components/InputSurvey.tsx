@@ -22,7 +22,10 @@ export default function InputSurvey() {
   // Preview Survey Model
 
   // Example for Custom Theme
-  const customTheme: ITheme = { ...superSurveyTheme, cssVariables: { '--sjs-primary-backcolor': '#D92D20' } }
+  const customTheme: ITheme = {
+    ...superSurveyTheme,
+    cssVariables: { ...superSurveyTheme.cssVariables, '--sjs-primary-backcolor': '#D92D20' },
+  }
 
   svy.applyTheme(customTheme)
 
