@@ -13,21 +13,14 @@ export abstract class DisplayPreview extends CustomizableSurveyModel {
   }
 
   protected customizeCheckboxRender(data: IQuestionPlainData): string {
-    // TODO: implement that can customize icon on prefix text preview
-    return `
-      <div style="display: flex; justify-items: center; align-items: center; gap: 0.5rem;">
-        <svg width="16" height="16"><use href="#icon-v2check"></use></svg>
-        <p> ${data.displayValue} </p>
-      </div>
-    `
+    return new DisplayPreviewMode().renderPreviewInput(data)
   }
 
   protected customizeRadioGroupRender(data: IQuestionPlainData): string {
     // TODO: hide old input text component
     return `
-      <div style="display: flex; justify-items: center; align-items: center; gap: 0.5rem;">
-        <svg width="16" height="16"><use href="#icon-v2check"></use></svg>
-        <p> ${data.displayValue} </p>
+      <div class="sd-text__content sd-question__content" style="display: flex; justify-items: center; align-items: center; gap: 0.5rem;">
+        <div> ${data.displayValue} </div>
       </div>
     `
   }
@@ -96,6 +89,7 @@ export abstract class DisplayPreview extends CustomizableSurveyModel {
     csm.mergeData(newData)
     csm.mode = 'display'
     settings.readOnlyTextRenderMode = 'div'
+
     return csm
   }
 }
@@ -103,5 +97,14 @@ export abstract class DisplayPreview extends CustomizableSurveyModel {
 export class DisplayPreviewMode extends DisplayPreview {
   public static make() {
     return new DisplayPreviewMode()
+  }
+
+  public renderPreviewInput(data: IQuestionPlainData): string {
+    return `
+    <div class="sd-text__content sd-question__content" style="display: flex; justify-items: center; align-items: center; gap: 0.5rem;">
+      <svg width="16" height="16"><use href="#icon-v2check"></use></svg>
+      <div> ${data.displayValue} </div>
+    </div>
+  `
   }
 }
