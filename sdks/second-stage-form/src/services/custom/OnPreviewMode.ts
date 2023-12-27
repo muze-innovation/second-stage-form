@@ -12,6 +12,7 @@ export abstract class DisplayPreview extends CustomizableSurveyModel {
     return ''
   }
 
+  // FIXME: WTF this korn
   protected customizeCheckboxRender(data: IQuestionPlainData): string {
     return new DisplayPreviewMode().renderPreviewInput(data)
   }
