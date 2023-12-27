@@ -19,7 +19,10 @@ export default function InputSurvey() {
   // States
   const svy = new CustomizableSurveyModel(surveyJson)
   // Preview Survey Model
-  svy.applyTheme(theme)
+  const superSurveyTheme = CustomizableSurveyModel.defaultTheme()
+  superSurveyTheme.cssVariables['--sjs-primary-backcolor'] = '#D92D20'
+
+  svy.applyTheme(superSurveyTheme)
 
   svy.onValidateQuestion.add((_, otps) => {
     console.log('otps onValidateQuestion =>', otps.question.getAllErrors())
