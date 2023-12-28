@@ -60,9 +60,9 @@
 .sd-element__title span {
   line-height: 16px;
 }
-.sd-question--disabled .sd-question__content {
+/* .sd-question--disabled .sd-question__content {
   opacity: 0.25;
-}
+} */
 
 /* panel title */
 h4.sd-title.sd-element__title {

@@ -13,15 +13,30 @@ export abstract class DisplayPreview {
   }
 
   protected customizeCheckboxRender(data: IQuestionPlainData): string {
+    // TODO: add class for caller customize
     return `
-    <div class="sd-text__content sd-question__content" style="display: flex; justify-items: center; align-items: center; gap: 0.5rem;">
-      <svg width="16" height="16"><use href="#icon-v2check"></use></svg>
-      <div> ${data.displayValue} </div>
+    <div style="padding-bottom: 4px"> ${data.title} </div>
+    <div class="sd-text__content sd-question__content" style="display: flex; flex-direction: column; justify-items: center; gap: 0.5rem;">
+      ${
+        data.value && data.value.length > 0
+          ? data.value
+              .map((item: string | number) => {
+                return ` 
+              <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <svg width="16" height="16"><use href="#icon-v2check"></use></svg>
+              <div> ${item} </div>
+              </div>`
+              })
+              .join(' ')
+          : `<svg width="16" height="16"><use href="#icon-v2check"></use></svg>
+            <div> ${data.displayValue} </div>`
+      }
     </div>`
   }
 
   protected customizeRadioGroupRender(data: IQuestionPlainData): string {
     return `
+      <div> ${data.title} </div>
       <div class="sd-text__content sd-question__content" style="display: flex; justify-items: center; align-items: center; gap: 0.5rem;">
         <div> ${data.displayValue} </div>
       </div>

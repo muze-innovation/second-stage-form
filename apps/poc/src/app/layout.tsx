@@ -3,6 +3,7 @@ import 'survey-core/defaultV2.min.css'
 import './globals.css'
 import './styles/custom-sjs.css'
 import './styles/product-form.css'
+import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -12,7 +13,14 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html>
-      <body className="h-screen w-screen bg-default-50 p-8">{children}</body>
+      <body className="h-screen w-screen bg-default-50 p-8">
+        <div className="mb-10">
+          <Link href="/" className="p-4 border border-blue-700 rounded-lg">
+            Back to Home
+          </Link>
+        </div>
+        {children}
+      </body>
     </html>
   )
 }
