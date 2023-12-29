@@ -1,12 +1,48 @@
 import type { IQuestionPlainData } from 'survey-core/typings/question'
-import type { TextMarkdownEvent } from 'survey-core'
-import type { SurveyModelCustomizer } from '../../interfaces'
+import type { AfterRenderQuestionEvent, TextMarkdownEvent, UploadFilesEvent } from 'survey-core'
+import type { SurveyFileUploadValidatorScheme, SurveyModelCustomizer } from '../../interfaces'
 
 import { Model, settings } from 'survey-core'
+import { getPreviewModalHTML } from './ComponentUtils'
 
 // TODO: add more other case
 
 export abstract class DisplayPreview {
+  private addedFilePreviewOnClick(option: AfterRenderQuestionEvent) {
+    const { jsonObj } = option.question as any
+    const customProperties = jsonObj.custom as SurveyFileUploadValidatorScheme
+
+    const html = getPreviewModalHTML(customProperties)
+
+    let modal = document.body.querySelector('.modal') as HTMLElement
+    if (!modal) {
+      // const html = await resp.text()
+      document.body.insertAdjacentHTML('beforeend', html)
+      modal = document.body.querySelector('.modal') as HTMLElement
+    }
+
+    const preview = document.querySelectorAll('.sd-file__image-wrapper > img') as NodeListOf<HTMLElement>
+    const imageModal = document.getElementById('image-modal') as HTMLImageElement
+    const closedButtons = document.querySelectorAll('.close-button') as NodeListOf<HTMLElement>
+
+    preview.forEach((p) => {
+      if (modal && imageModal) {
+        p.onclick = function () {
+          modal.style.display = 'block'
+          imageModal.src = (this as HTMLImageElement).src
+        }
+      }
+    })
+
+    closedButtons.forEach((button) => {
+      if (modal) {
+        button.onclick = function () {
+          modal.style.display = 'none'
+        }
+      }
+    })
+  }
+
   protected customizeImages(name: this): string {
     // TODO: implement that can customize icon on prefix text preview
     return ''
@@ -106,6 +142,10 @@ export abstract class DisplayPreview {
           model.clearValue(name)
         }
       }
+
+      model.onAfterRenderQuestion.add(async (_, o) => {
+        this.addedFilePreviewOnClick(o)
+      })
 
       model.mode = 'display'
       settings.readOnlyTextRenderMode = 'div'
