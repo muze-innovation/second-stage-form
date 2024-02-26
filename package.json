@@ -1,5 +1,4 @@
 {
-  "private": true,
   "scripts": {
     "dev": "export STAGE=local && turbo run dev",
     "dev:example": "npm run dev -w example",
