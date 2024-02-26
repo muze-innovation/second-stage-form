@@ -9,6 +9,8 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
+      - name: Setting git Author identity
+        run: git config --global user.email "github-action@muze.co.th" && git config --global user.name "muze"
       - uses: actions/checkout@v4
       - name: Use Node.js 20
         uses: actions/setup-node@v3
