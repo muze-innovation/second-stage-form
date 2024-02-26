@@ -4,7 +4,7 @@
     "dev:example": "npm run dev -w example",
     "build:sdks:second-stage-form": "npm run build -w @muze-library/second-stage-form"
   },
-  "name": "second-stage-form",
+  "name": "@muze-innovation/second-stage-form",
   "packageManager": "npm@9.5.1",
   "workspaces": [
     "packages/*",
