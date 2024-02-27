@@ -1,0 +1,14 @@
+{
+  "extends": "tsconfig/application.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "./dist",
+    "lib": ["dom"]
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules/**/*"],
+  "ts-node": {
+    "transpileOnly": true,
+    "retsconfig-pathsuire": ["tsconfig-paths/register"]
+  }
+}

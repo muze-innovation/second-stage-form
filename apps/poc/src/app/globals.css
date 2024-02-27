@@ -1,0 +1,175 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  @font-face {
+    font-family: 'IBMPlexSansThai';
+    src: url('../public/fonts/IBMPlexSansThai/IBMPlexSansThai-Regular.eot');
+    src: url('../public/fonts/IBMPlexSansThai/IBMPlexSansThai-Regular.eot?') format('embedded-opentype'),
+      url('../public/fonts/IBMPlexSansThai/IBMPlexSansThai-Regular.woff') format('woff'),
+      url('../public/fonts/IBMPlexSansThai/IBMPlexSansThai-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'IBMPlexSansThai';
+    src: url('../public/fonts/IBMPlexSansThai/IBMPlexSansThai-Medium.eot');
+    src: url('../public/fonts/IBMPlexSansThai/IBMPlexSansThai-Medium.eot?') format('embedded-opentype'),
+      url('../public/fonts/IBMPlexSansThai/IBMPlexSansThai-Medium.woff') format('woff'),
+      url('../public/fonts/IBMPlexSansThai/IBMPlexSansThai-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'IBMPlexSansThai';
+    src: url('../public/fonts/IBMPlexSansThai/IBMPlexSansThai-SemiBold.eot');
+    src: url('../public/fonts/IBMPlexSansThai/IBMPlexSansThai-SemiBold.eot?') format('embedded-opentype'),
+      url('../public/fonts/IBMPlexSansThai/IBMPlexSansThai-SemiBold.woff') format('woff'),
+      url('../public/fonts/IBMPlexSansThai/IBMPlexSansThai-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'IBMPlexSansThai';
+    src: url('../public/fonts/IBMPlexSansThai/IBMPlexSansThai-Bold.eot');
+    src: url('../public/fonts/IBMPlexSansThai/IBMPlexSansThai-Bold.eot?') format('embedded-opentype'),
+      url('../public/fonts/IBMPlexSansThai/IBMPlexSansThai-Bold.woff') format('woff'),
+      url('../public/fonts/IBMPlexSansThai/IBMPlexSansThai-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'IBMPlexSansThaiLooped';
+    src: url('../public/fonts/IBMPlexSansThaiLooped/IBMPlexSansThaiLooped-Regular.eot');
+    src: url('../public/fonts/IBMPlexSansThaiLooped/IBMPlexSansThaiLooped-Regular.eot?') format('embedded-opentype'),
+      url('../public/fonts/IBMPlexSansThaiLooped/IBMPlexSansThaiLooped-Regular.woff') format('woff'),
+      url('../public/fonts/IBMPlexSansThaiLooped/IBMPlexSansThaiLooped-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'IBMPlexSansThaiLooped';
+    src: url('../public/fonts/IBMPlexSansThaiLooped/IBMPlexSansThaiLooped-SemiBold.eot');
+    src: url('../public/fonts/IBMPlexSansThaiLooped/IBMPlexSansThaiLooped-SemiBold.eot?') format('embedded-opentype'),
+      url('../public/fonts/IBMPlexSansThaiLooped/IBMPlexSansThaiLooped-SemiBold.woff') format('woff'),
+      url('../public/fonts/IBMPlexSansThaiLooped/IBMPlexSansThaiLooped-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+  }
+
+  :root {
+    --ibmSans-font: 'IBMPlexSansThai';
+    --ibmSansLooped-font: 'IBMPlexSansThaiLooped';
+  }
+
+  .ibmsans-normal {
+    font-family: var(--ibmSans-font);
+    font-weight: 400;
+  }
+  .ibmsans-medium {
+    font-family: var(--ibmSans-font);
+    font-weight: 500;
+  }
+  .ibmsans-semibold {
+    font-family: var(--ibmSans-font);
+    font-weight: 600;
+  }
+  .ibmsans-bold {
+    font-family: var(--ibmSans-font);
+    font-weight: 700;
+  }
+  .ibmsanslooped-normal {
+    font-family: var(--ibmSansLooped-font);
+    font-weight: 400;
+  }
+  .ibmsanslooped-semibold {
+    font-family: var(--ibmSansLooped-font);
+    font-weight: 600;
+  }
+
+  body {
+    @apply ibmsans-normal text-base;
+  }
+
+  body:has(.block-ui) {
+    @apply m-0 h-full overflow-hidden;
+  }
+
+  h2,
+  h3,
+  h4,
+  h6 {
+    @apply ibmsans-bold;
+  }
+  h2 {
+    @apply text-3xl;
+  }
+  h3 {
+    @apply text-md;
+  }
+  h4 {
+    @apply text-2xl;
+  }
+  h6 {
+    @apply text-md leading-[26px];
+  }
+  p,
+  small {
+    @apply ibmsanslooped-normal;
+  }
+  p {
+    @apply text-base leading-[28px];
+  }
+  small {
+    @apply text-sm leading-[26px];
+  }
+  p.strong,
+  small.strong {
+    @apply ibmsanslooped-semibold;
+  }
+  /* mui selector component */
+  button[role='combobox'].peer span.absolute {
+    @apply truncate max-w-[370px];
+  }
+}
+
+@layer components {
+  .chevron {
+    @apply before:border-t-2 before:border-r-2 before:content-none before:inline-block before:h-2 before:w-2;
+  }
+}
+
+.text-editor-text-parent p {
+  font-family: var(--ibmSans-font);
+  font-weight: 400;
+}
+.text-editor-text-parent a {
+  color: #074e9f;
+  text-decoration: underline;
+}
+.text-editor-text-parent > ul {
+  padding-left: 35px !important;
+}
+
+.text-editor-text-parent > ul li {
+  list-style: disc;
+}
+
+.text-editor-text-parent > ol {
+  padding-left: 35px !important;
+}
+.text-editor-text-parent > ol li {
+  list-style: decimal;
+}
+.text-editor-text-parent > h2 {
+  font-size: 24px !important;
+}
+
+.text-editor-text-parent > h3 {
+  font-size: 22px !important;
+}
+
+.text-editor-text-parent > h4 {
+  font-size: 18px !important;
+}

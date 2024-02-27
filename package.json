@@ -1,0 +1,19 @@
+{
+  "scripts": {
+    "dev": "export STAGE=local && turbo run dev",
+    "dev:example": "npm run dev -w example",
+    "build:sdks:second-stage-form": "npm run build -w @muze-library/second-stage-form"
+  },
+  "name": "second-stage-form",
+  "packageManager": "npm@9.5.1",
+  "workspaces": [
+    "packages/*",
+    "apps/*",
+    "sdks/*"
+  ],
+  "dependencies": {
+    "prettier": "^2.5.1",
+    "tsup": "^6.5.0",
+    "turbo": "^1.10.15"
+  }
+}

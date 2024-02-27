@@ -1,0 +1,29 @@
+name: Publish to npm
+
+on:
+  # Trigger the workflow on pushes to the main branch
+  push:
+    tags: ["*"]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setting git Author identity
+        run: git config --global user.email "github-action@muze.co.th" && git config --global user.name "muze"
+      - uses: actions/checkout@v4
+      - name: Use Node.js 20
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
+          registry-url: 'https://registry.npmjs.org'
+      - name: Install dependencies
+        run: npm ci
+      - name: Build the package
+        run: npm run build:sdks:second-stage-form
+      - name: Setting NPM version
+        run: npm version ${{ github.ref_name }}
+      - name: Publish the package
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish
