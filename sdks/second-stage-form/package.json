@@ -1,5 +1,5 @@
 {
-  "name": "@muze-library/second-stage-form",
+  "name": "@muzeinnovation/second-stage-form",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
