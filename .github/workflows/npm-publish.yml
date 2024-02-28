@@ -22,7 +22,7 @@ jobs:
       - name: Build the package
         run: npm run build:sdks:second-stage-form
       - name: Setting NPM version
-        run: npm version ${{ github.ref_name }}
+        run: npm version -w @muze-library/second-stage-form ${{ github.ref_name }}
       - name: Publish the package
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
