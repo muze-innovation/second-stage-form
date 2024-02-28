@@ -2,9 +2,9 @@
   "scripts": {
     "dev": "export STAGE=local && turbo run dev",
     "dev:example": "npm run dev -w example",
-    "build:sdks:second-stage-form": "npm run build -w @muzeinnovation/second-stage-form"
+    "build:sdks:second-stage-form": "npm run build -w second-stage-form"
   },
-  "name": "second-stage-form",
+  "name": "core",
   "packageManager": "npm@9.5.1",
   "workspaces": [
     "packages/*",

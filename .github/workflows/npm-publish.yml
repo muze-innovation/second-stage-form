@@ -22,8 +22,8 @@ jobs:
       - name: Build the package
         run: npm run build:sdks:second-stage-form
       - name: Setting NPM version
-        run: npm version -w @muzeinnovation/second-stage-form ${{ github.ref_name }}
+        run: npm version -w second-stage-form ${{ github.ref_name }}
       - name: Publish the package
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm publish -w @muzeinnovation/second-stage-form --access=public
+        run: npm publish -w second-stage-form --access=public

@@ -15,7 +15,7 @@
     "survey-core": "^1.9.116",
     "survey-react-ui": "^1.9.103",
     "zod": "^3.22.4",
-    "@muze-library/second-stage-form": "*"
+    "second-stage-form": "*"
   },
   "devDependencies": {
     "@types/node": "^20",

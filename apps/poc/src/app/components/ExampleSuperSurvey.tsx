@@ -8,7 +8,7 @@ import {
   CustomOnUploadFilesBuilder,
   DisplayPreviewMode,
   superSurveyTheme,
-} from '@muze-library/second-stage-form'
+} from 'second-stage-form'
 import { jsonSuperSurvey } from '../models/exampleSuperSurvey'
 
 export default function ExampleSuperSurvey() {

@@ -13,7 +13,7 @@ import {
   CustomOnUploadFilesBuilder,
   DisplayPreviewMode,
   superSurveyTheme,
-} from '@muze-library/second-stage-form'
+} from 'second-stage-form'
 
 export default function InputSurvey() {
   settings.showMaxLengthIndicator = false
